@@ -1,43 +1,31 @@
-# Stage 1: Build da aplicação usando Gradle
+# Stage 1: Build
 FROM eclipse-temurin:21-jdk-jammy AS build
 
-# Diretório de trabalho no container
 WORKDIR /app
 
-# Copiar apenas os arquivos de configuração do Gradle primeiro para aproveitar o cache
-COPY gradlew .
+# Copiar arquivos de configuração do Gradle
 COPY gradle gradle
+COPY gradlew .
+COPY gradlew.bat .
 COPY build.gradle .
 COPY settings.gradle .
-COPY gradle.properties .
 
-# Dar permissão de execução ao wrapper do Gradle
-RUN chmod +x gradlew
-
-# Baixar dependências (aproveita cache do Docker se build.gradle não mudar)
-RUN ./gradlew dependencies --no-daemon
-
-# Copiar o código fonte
+# Copiar código fonte
 COPY src src
 
-# Fazer o build da aplicação (gera o JAR)
-RUN ./gradlew build -x bootJar --no-daemon
+# Compilar (sem criar JAR)
+RUN chmod +x gradlew && ./gradlew build -x bootJar --no-daemon
 
-# Stage 2: Imagem final de produção
+# Stage 2: Runtime
 FROM eclipse-temurin:21-jre-jammy
 
-# Diretório de trabalho
 WORKDIR /app
 
-# Adicionar usuário não-root para segurança
-RUN groupadd -r spring && useradd -r -g spring spring
-USER spring:spring
-
-# Copiar o JAR gerado do stage de build
+# Copiar o JAR compilado do stage anterior
 COPY --from=build /app/build/libs/*.jar app.jar
 
-# Expor a porta que a aplicação usa
+# Expor porta
 EXPOSE 8080
 
-# Comando para iniciar a aplicação
+# Iniciar aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]
