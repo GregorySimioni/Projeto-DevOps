@@ -21,7 +21,7 @@ RUN ./gradlew dependencies --no-daemon
 COPY src src
 
 # Fazer o build da aplicação (gera o JAR)
-RUN ./gradlew bootJar --no-daemon
+RUN ./gradlew build -x bootJar --no-daemon
 
 # Stage 2: Imagem final de produção
 FROM eclipse-temurin:21-jre-jammy
