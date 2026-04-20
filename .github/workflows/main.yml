@@ -23,5 +23,5 @@ jobs:
       - name: Build with Gradle
         run: gradle build -x bootJar
 
-     - name: Build completed successfully
+      - name: Build completed successfully
        run: echo "Build completed!"
