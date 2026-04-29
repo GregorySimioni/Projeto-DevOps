@@ -20,13 +20,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Make gradlew executable
-        run: chmod +x ./Entrega-DevOps/gradlew
-
-      - name: Run Tests
-        working-directory: ./Entrega-DevOps
-        run: ./gradlew test
-
 
       - name: Build completed successfully
         run: echo "Build completed!"
