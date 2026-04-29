@@ -21,7 +21,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Run Tests
+        working-directory: ./Entrega-DevOps
         run: ./gradlew test
+
 
       - name: Build completed successfully
         run: echo "Build completed!"
