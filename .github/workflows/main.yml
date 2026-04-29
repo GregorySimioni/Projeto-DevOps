@@ -20,8 +20,8 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build with Gradle
-        run: gradle build -x bootJar
+      - name: Run Tests
+        run: ./gradlew test
 
       - name: Build completed successfully
         run: echo "Build completed!"
